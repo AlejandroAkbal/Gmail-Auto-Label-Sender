@@ -1,8 +1,8 @@
 {
-  "name": "#REPLACE:packagename",
-  "userscriptName": "#REPLACE:Userscript Name",
-  "version": "1.0.0",
-  "description": "#REPLACE:Userscript Description",
+  "name": "gmail-auto-label-sender",
+  "userscriptName": "Gmail Auto Label Sender",
+  "version": "0.2.0",
+  "description": "Automatically create or update Gmail filters to label emails from specific senders",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -24,17 +24,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/#REPLACE:User/Repo.git"
+    "url": "git+https://github.com/AlejandroAkbal/Gmail-Auto-Label-Sender.git"
   },
   "author": {
-    "name": "#REPLACE:Author name",
-    "url": "#REPLACE:Author URL"
+    "name": "Alejandro Akbal",
+    "url": "https://github.com/AlejandroAkbal"
   },
-  "license": "WTFPL",
+  "license": "AGPL-3.0",
   "bugs": {
-    "url": "https://github.com/#REPLACE:User/Repo/issues"
+    "url": "https://github.com/AlejandroAkbal/Gmail-Auto-Label-Sender/issues"
   },
-  "homepage": "https://github.com/#REPLACE:User/Repo#readme",
+  "homepage": "https://github.com/AlejandroAkbal/Gmail-Auto-Label-Sender#readme",
   "devDependencies": {
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.2.3",

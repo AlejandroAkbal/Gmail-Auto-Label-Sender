@@ -10,7 +10,7 @@ export const mode = (modeRaw.match(/^#{{.+}}$/) ? "production" : modeRaw) as "pr
 /** The branch to use in various URLs that point to the GitHub repo */
 export const branch = (branchRaw.match(/^#{{.+}}$/) ? "main" : branchRaw) as "main" | "develop";
 /** Path to the GitHub repo in the format "User/Repo" */
-export const repo = "#REPLACE:User/Repo";
+export const repo = "AlejandroAkbal/Gmail-Auto-Label-Sender";
 /** Which host the userscript was installed from */
 export const host = (hostRaw.match(/^#{{.+}}$/) ? "github" : hostRaw) as "github" | "greasyfork" | "openuserjs";
 /** The build number of the userscript */
@@ -47,3 +47,11 @@ export const scriptInfo = {
   version: GM.info.script.version,
   namespace: GM.info.script.namespace,
 } as const;
+
+//#region Gmail Auto Label Sender constants
+
+/** Prefix used in the "Doesn't have" field to identify filters created by this script */
+export const METADATA_PREFIX = "autolabel_metadata_v1_";
+
+/** Timeout for waiting for elements to appear in the DOM (in ms) */
+export const ELEMENT_WAIT_TIMEOUT = 5000;

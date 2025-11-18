@@ -102,3 +102,95 @@ export function addStyle(css: string, ref?: string) {
   elem.id = `global-style-${ref ?? randomId(5, 36)}`;
   return elem;
 }
+
+//#region Gmail-specific utilities
+
+/**
+ * Validates an email address using a basic regex pattern
+ */
+export function validateEmail(email: string): boolean {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(email);
+}
+
+/**
+ * Extracts email address from formats like "Name <email@example.com>" or just "email@example.com"
+ */
+export function extractEmailAddress(emailString: string): string {
+  // Handle "Name <email@example.com>" format
+  const match = emailString.match(/<([^>]+)>/);
+  if (match) return match[1];
+
+  // Handle plain email format
+  const emailMatch = emailString.match(/[\w.-]+@[\w.-]+\.\w+/);
+  return emailMatch ? emailMatch[0] : emailString.trim();
+}
+
+/**
+ * Finds an input element by its associated label text in Gmail's settings UI
+ * Gmail uses <label for="id">Text</label> to associate labels with inputs
+ */
+export function findInputByLabel(labelText: string): HTMLInputElement | null {
+  const labels = Array.from(document.querySelectorAll("label"));
+
+  // Try exact match first
+  let label = labels.find((l) => l.textContent?.trim() === labelText);
+
+  // If not found, try case-insensitive contains match
+  if (!label) {
+    label = labels.find((l) => l.textContent?.toLowerCase().includes(labelText.toLowerCase()));
+  }
+
+  if (!label) {
+    console.warn(`[Gmail Auto-Label] Could not find label with text: "${labelText}"`);
+    return null;
+  }
+
+  const inputId = label.getAttribute("for");
+  if (!inputId) {
+    console.warn(`[Gmail Auto-Label] Label "${labelText}" has no 'for' attribute`);
+    return null;
+  }
+
+  const input = document.getElementById(inputId) as HTMLInputElement;
+  if (!input) {
+    console.warn(`[Gmail Auto-Label] Could not find input with id: "${inputId}"`);
+    return null;
+  }
+
+  return input;
+}
+
+/**
+ * Extracts sender email from a clicked email element by walking up the DOM tree
+ */
+export function extractSenderFromElement(element: HTMLElement): string | null {
+  // Walk up the DOM tree to find the email container
+  let current: HTMLElement | null = element;
+  for (let i = 0; i < 15 && current; i++) {
+    // Method 1: Look for email attribute
+    const emailEl = current.querySelector("[email]");
+    if (emailEl) {
+      const email = emailEl.getAttribute("email");
+      if (email && validateEmail(email)) return email;
+    }
+
+    // Method 2: Look in data attributes
+    if (current.hasAttribute("email")) {
+      const email = current.getAttribute("email");
+      if (email && validateEmail(email)) return email;
+    }
+
+    // Method 3: Parse from text content of sender field
+    const senderEl = current.querySelector(".go, .gD, .g2");
+    if (senderEl) {
+      const text = senderEl.textContent || "";
+      const extracted = extractEmailAddress(text);
+      if (extracted && validateEmail(extracted)) return extracted;
+    }
+
+    current = current.parentElement;
+  }
+
+  return null;
+}

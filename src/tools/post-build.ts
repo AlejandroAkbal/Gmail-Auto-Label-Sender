@@ -5,7 +5,7 @@ import { randomUUID } from "node:crypto";
 import { exec } from "node:child_process";
 import "dotenv/config";
 import { outputDir as rollupCfgOutputDir, outputFile as rollupCfgOutputFile } from "../../rollup.config.mjs";
-import pkg from "../../package.json" assert { type: "json" };
+import pkg from "../../package.json" with { type: "json" };
 import type { RollupArgs } from "../types";
 
 type CliArg<TName extends keyof Required<RollupArgs>> = Required<RollupArgs>[TName];
@@ -22,7 +22,7 @@ const suffix = getCliArg<CliArg<"config-suffix">>("suffix", "");
 //#MARKER settings:
 
 /** Path to the GitHub repo in the format "User/Repo" */
-const repo = "#REPLACE:User/Repo";
+const repo = "AlejandroAkbal/Gmail-Auto-Label-Sender";
 /** Name of the emitted userscript file */
 const userscriptDistFile = `${pkg.userscriptName}${suffix}.user.js`;
 
@@ -102,19 +102,12 @@ const ringBell = Boolean(env.RING_BELL && (env.RING_BELL.length > 0 && env.RING_
 // @license           ${pkg.license}
 // @author            ${pkg.author.name}
 // @copyright         ${pkg.author.name} (${pkg.author.url})
-// @icon              ${getResourceUrl("images/logo_48.png", buildNbr)}
-// @match             #REPLACE:Match URL(s) - i.e. *://*.example.com/*
-// @run-at            document-start
+// @icon              https://www.google.com/s2/favicons?sz=64&domain=gmail.com
+// @match             https://mail.google.com/*
+// @run-at            document-idle
 // @downloadURL       ${scriptUrl}
 // @updateURL         ${scriptUrl}
-// @connect           github.com
-// @connect           raw.githubusercontent.com
-// @grant             GM.getValue
-// @grant             GM.setValue
-// @grant             GM.deleteValue
-// @grant             GM.getResourceUrl
-// @grant             GM.xmlHttpRequest
-// @grant             GM.openInTab
+// @grant             none
 // @noframes\
 ${resourcesDirectives ? "\n" + resourcesDirectives : ""}\
 ${requireDirectives ? "\n" + requireDirectives : ""}\
